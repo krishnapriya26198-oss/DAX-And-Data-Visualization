@@ -52,60 +52,29 @@ A proper data model ensures accurate calculations and meaningful analysis.
 
 **Category Type**
 
-```dax
-Category Type =
-'Order Details'[Category] & " - " &
-'Order Details'[Sub-Category]
-```
+Category Type = CONCATENATE('Order Details'[Category], CONCATENATE(" - ", 'Order Details'[Sub-Category]))
 
 **Revenue per Order**
 
-```dax
-Revenue per Order =
-'Order Details'[Amount] *
-'Order Details'[Quantity]
-```
+Revenue per Order = 'Order Details'[Amount]*'Order Details'[Quantity]
 
 **Sales Category**
 
-```dax
-Sales Category =
-IF(
-    'Order Details'[Amount] >
-    AVERAGE('Order Details'[Amount]),
-    "Above Average",
-    "Below Average"
-)
-```
+Sales Category = IF('Order Details'[Amount] > AVERAGE('Order Details'[Amount]), "Above Average", "Below Average")
 
 ### 2. Calculated Measures
 
 **Order Count**
 
-```dax
-Order Count =
-COUNT('Order Details'[Order ID])
-```
+Number of Order = COUNT('Order Details'[Order ID])
 
 **Average Profit in Delhi**
 
-```dax
-Average Profit in Delhi =
-CALCULATE(
-    AVERAGE('Order Details'[Profit]),
-    'List of Orders'[City] = "Delhi"
-)
-```
+Avg Profit Delhi = CALCULATE(AVERAGE('Order Details'[Profit]),FILTER('List of Orders', 'List of Orders'[City]="Delhi"))
 
 **Year-to-Date (YTD) Sales**
 
-```dax
-YTD Sales =
-TOTALYTD(
-    SUM('Order Details'[Amount]),
-    'List of Orders'[Order Date]
-)
-```
+YTD Sales = TOTALYTD(SUM('Order Details'[Amount]), 'List of Orders'[Order Date])
 
 *Note: A dedicated Date table is recommended for accurate time-intelligence calculations.*
 
